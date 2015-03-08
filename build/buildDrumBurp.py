@@ -17,6 +17,7 @@ class BuildSettings(object):
         self.db_root = None
         self.output_dir = None
         self.spec_path = None
+        self._source = None
         self.working_dir = None
         self.clean = False
 
@@ -46,8 +47,10 @@ class BuildSettings(object):
             settings.output_dir = opts.output
         else:
             settings.output_dir = os.path.join(os.path.dirname(__file__))
+        settings._source = os.path.join(settings.output_dir, 'source')
         settings.output_dir = os.path.join(settings.output_dir,
                                            settings.get_output_name())
+
         if opts.spec:
             settings.spec_path = opts.spec
         if opts.build:
@@ -98,6 +101,11 @@ class BuildSettings(object):
         else:
             return ""
 
+    def source_package(self):
+        return os.path.join(self._source,
+                            'DrumBurp' + '-v' + self._get_version()
+                            + '-source.zip')
+
 def pyinstaller_path():
     if platform.system() == "Windows":
         return os.path.join(os.path.dirname(PYTHON), "Scripts",
@@ -106,7 +114,30 @@ def pyinstaller_path():
         return os.path.join(os.path.dirname(PYTHON), "bin", "pyinstaller")
 
 def make_source_zip(settings):
-    pass
+    source_dir = os.path.dirname(settings.source_package())
+    if not os.path.exists(source_dir):
+        os.makedirs(source_dir)
+    with zipfile.ZipFile(settings.source_package(), mode = 'w',
+                         compression = zipfile.ZIP_DEFLATED) as source:
+        root = settings.db_path()
+        for dirpath, _, filenames in os.walk(settings.db_path('src')):
+            for filename in filenames:
+                if filename.startswith('test'):
+                    continue
+                if filename == 'Thumbs.db':
+                    continue
+                extension = filename.split(os.extsep)[-1]
+                if extension in ('pyc', 'ui', 'qrc', 'png', 'ico'):
+                    continue
+                src_path = os.path.join(dirpath, filename)
+                arcname = src_path[len(root):]
+                while arcname and arcname.startswith(os.sep):
+                    arcname = arcname[len(os.sep):]
+                source.write(src_path, arcname = arcname)
+        source.write(settings.db_path('COPYING.txt'),
+                     arcname = 'COPYING.txt')
+        source.write(settings.db_path('README.txt'),
+                     arcname = 'README.txt')
 
 def build(settings):
     pyinstaller = pyinstaller_path()
@@ -142,8 +173,10 @@ def package(settings):
 def main():
     settings = BuildSettings.read_args()
     make_source_zip(settings)
+    print "Source written to", settings.source_package()
     build(settings)
     package(settings)
+    print "DrumBurp packaged in", settings.packaged_file()
 
 if __name__ == '__main__':
     main()
