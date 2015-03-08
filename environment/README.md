@@ -117,6 +117,24 @@ This will install various packages which are necessary for developing and
 building DrumBurp, including pylint and pyinstaller.
  
 
+
+Fix Pyinstaller
+===============
+
+Pyinstaller has a bug on Windows which leads to an annoying error popup whenever
+a built version of DrumBurp starts. To remove this error the following change
+needs to be made after pyinstaller has been installed by pip.
+
+Find the Lib/site-packages/Pyinstaller directory. Open the file build.py and
+change line 1587 from
+
+            if tpl[2] == "BINARY":
+            
+to
+
+            if tpl[2] in ("BINARY", "DATA"):
+
+
 Developing
 ==========
 
