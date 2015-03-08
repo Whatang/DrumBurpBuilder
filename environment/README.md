@@ -4,6 +4,7 @@ Creating a development environment for DrumBurp
 This file contains instructions on creating an environment for development of
 the DrumBurp drum music editor. DrumBurp is available from www.whatang.org.
 
+
 Install Python
 ==============
 
@@ -13,12 +14,14 @@ Linux distribution's package manager. DrumBurp uses Python 2, not Python 3.
 If on Windows, note whether you have installed the 32 bit or 64 bit version
 of Python.
 
+
 Install pip
 ===========
 
 The latest versions of python include pip in their distribution. If pip is not
 included in the version of python you installed, run the get-pip.py script in
 this directory using the python you just installed.
+
 
 Install PyQt4
 =============
@@ -63,6 +66,7 @@ following changes:
 2. Instead of downloading the x11 PyQt4 package, get the mac version. This file 
    is also available in this directory.  
 
+
 Install pygame
 ==============
 
@@ -89,6 +93,18 @@ There are some compiled versions of pygame for Mac available from
 http://www.pygame.org/download.shtml.
 
 If these do not work, you can try building from source as for Linux above.
+
+
+Install pywin
+=============
+
+This step only applies for Windows systems. It is necessary for pyinstaller to
+work when building a DrumBurp release.
+
+Runn the appropriate 32 or 64 bit pywin32 installer available in this directory.
+Newer versions of pywin may be available from 
+http://sourceforge.net/projects/pywin32/files/
+
 
 Install Python packages
 =======================
