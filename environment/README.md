@@ -27,7 +27,7 @@ Install PyQt4
 =============
 
 Windows
-~~~~~~~
+-------
 
 According to the version of Python that you installed earlier, run either the 
 x32 or x64 installer for PyQt4 in this directory. Newer versions of PyQt4 are
@@ -36,7 +36,7 @@ these installers are the specific version that DrumBurp is built and tested
 against.
 
 Linux
-~~~~~
+-----
 
 You can either build PyQt4 from source, or install it from your distribution's
 package manager. Installing from a package manager means you may not have the
@@ -56,7 +56,7 @@ To install from source:
 	make install
 
 Mac
-~~~
+---
 
 Follow the instructions to build from source as for Linux, but make the 
 following changes:
@@ -74,12 +74,12 @@ DrumBurp uses pygame to work with MIDI. If pygame is not installed, DrumBurp
 will still work, but no MIDI functionality will be available.
 
 Windows
-~~~~~~~
+-------
 
 Use the 32 or 64 bit installer available in this directory to install pygame.
 
 Linux
-~~~~~
+-----
 
 Your distribution may have a version of pygame available to be installed. You
 want at least version 1.9.1. If this is not available, you can build from source
@@ -87,7 +87,7 @@ using the pygame-1.9.1release.tar.gz file in this directory. Unzip the archive
 and do python setup.py install.
 
 Mac
-~~~
+---
 
 There are some compiled versions of pygame for Mac available from 
 http://www.pygame.org/download.shtml.
