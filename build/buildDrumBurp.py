@@ -29,7 +29,7 @@ class BuildSettings(object):
         parser.add_option('-o', '--output', default = None,
                           help = 'Path to output build directory.')
         parser.add_option('-s', '--spec', default = None,
-                          help = 'Path to spec file.')
+                          help = 'Path to spec directory.')
         parser.add_option('-b', '--build', default = None,
                           help = 'Path to build dir.')
         parser.add_option('-c', '--clean', action = 'store_true',
@@ -48,13 +48,17 @@ class BuildSettings(object):
         else:
             settings.output_dir = os.path.join(os.path.dirname(__file__))
         settings._source = os.path.join(settings.output_dir, 'source')
+        if opts.spec:
+            settings.spec_path = opts.spec
+        else:
+            settings.spec_path = settings.output_dir
         settings.output_dir = os.path.join(settings.output_dir,
                                            settings.get_output_name())
 
-        if opts.spec:
-            settings.spec_path = opts.spec
         if opts.build:
             settings.working_dir = opts.build
+        else:
+            settings.working_dir = os.path.join(settings.output_dir, 'build')
         return settings
 
     def db_path(self, *args):
