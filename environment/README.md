@@ -46,14 +46,33 @@ To install from source:
 
 1. Download the Qt 4.8.6 source from 
    http://download.qt.io/official_releases/qt/4.8/4.8.6/qt-everywhere-opensource-src-4.8.6.tar.gz
+
 2. Follow the instructions on installing Qt given at 
    http://qt-project.org/doc/qt-4.8/install-x11.html
-3. Download PyQt 4.11 from http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11/PyQt-x11-gpl-4.11.tar.gz/download
-   This file is also available in this directory.
-4. Unzip the PyQt4 package and do
+   
+   You should make sure that you have the make, gcc, g++ and libxext-dev 
+   packages installed before trying to install Qt.
+
+3. Download SIP from http://sourceforge.net/projects/pyqt/files/sip/sip-4.16.8/sip-4.16.8.tar.gz/download
+   This file is also available in this directory. Unpack the SIP archive. Do
+   
+     python configure.py
+     make
+     make install
+   
+   You may need to install the python-dev package with your package manager
+   for this step to work.
+
+4. Download PyQt 4.11 from http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11/PyQt-x11-gpl-4.11.tar.gz/download
+   This file is also available in this directory. Unzip the PyQt4 package and do
+	
 	python configure-ng.py
 	make
 	make install
+
+  For this step to work you may need to specify the --qmake and --sip-incdir
+  options to the first command (python configure-ng.py). You should give these
+  options the paths where qmake and sip.h were installed by steps 2 and 3 above.
 
 Mac
 ---
@@ -66,6 +85,8 @@ following changes:
 2. Instead of downloading the x11 PyQt4 package, get the mac version. This file 
    is also available in this directory.  
 
+I've never built DrumBurp for a Mac so I've got no proof that it will work at 
+all. 
 
 Install pygame
 ==============
