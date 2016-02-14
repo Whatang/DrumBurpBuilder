@@ -115,7 +115,17 @@ def pyinstaller_path():
         return os.path.join(os.path.dirname(PYTHON), "Scripts",
                             "pyinstaller.exe")
     else:
-        return os.path.join(os.path.dirname(PYTHON), "bin", "pyinstaller")
+        pyi_path = os.path.join(os.path.dirname(PYTHON), "pyinstaller")
+        if os.path.exists(pyi_path):
+            return pyi_path
+        pyi_path = os.path.join(os.path.dirname(PYTHON), "bin", "pyinstaller")
+        if os.path.exists(pyi_path):
+            return pyi_path
+        pyi_path = subprocess.check_output(['which', 'pyinstaller'])
+        if os.path.exists(pyi_path):
+            return pyi_path
+        return "pyinstaller"
+
 
 def make_source_zip(settings):
     source_dir = os.path.dirname(settings.source_package())
