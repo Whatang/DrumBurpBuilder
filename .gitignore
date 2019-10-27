@@ -3,3 +3,4 @@
 .settings
 *.pyc
 output_builds
+.vscode/
