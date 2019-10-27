@@ -1,7 +1,7 @@
 '''
 Created on Mar 8, 2015
 
-@author: mike_000
+@author: Mike Thomas
 '''
 
 import sys
@@ -11,6 +11,7 @@ import subprocess
 import optparse
 import zipfile
 PYTHON = sys.executable
+
 
 class BuildSettings(object):
     def __init__(self):
@@ -26,14 +27,14 @@ class BuildSettings(object):
         settings = cls()
         parser = optparse.OptionParser()
         parser.set_description("Build a DrumBurp executable.")
-        parser.add_option('-o', '--output', default = None,
-                          help = 'Path to output build directory.')
-        parser.add_option('-s', '--spec', default = None,
-                          help = 'Path to spec directory.')
-        parser.add_option('-b', '--build', default = None,
-                          help = 'Path to build dir.')
-        parser.add_option('-c', '--clean', action = 'store_true',
-                          help = 'Do a clean build.')
+        parser.add_option('-o', '--output', default=None,
+                          help='Path to output build directory.')
+        parser.add_option('-s', '--spec', default=None,
+                          help='Path to spec directory.')
+        parser.add_option('-b', '--build', default=None,
+                          help='Path to build dir.')
+        parser.add_option('-c', '--clean', action='store_true',
+                          help='Do a clean build.')
         opts, args = parser.parse_args()
         if not args:
             parser.print_usage()
@@ -110,6 +111,7 @@ class BuildSettings(object):
                             'DrumBurp' + '-v' + self._get_version()
                             + '-source.zip')
 
+
 def pyinstaller_path():
     if platform.system() == "Windows":
         return os.path.join(os.path.dirname(PYTHON), "Scripts",
@@ -131,8 +133,8 @@ def make_source_zip(settings):
     source_dir = os.path.dirname(settings.source_package())
     if not os.path.exists(source_dir):
         os.makedirs(source_dir)
-    with zipfile.ZipFile(settings.source_package(), mode = 'w',
-                         compression = zipfile.ZIP_DEFLATED) as source:
+    with zipfile.ZipFile(settings.source_package(), mode='w',
+                         compression=zipfile.ZIP_DEFLATED) as source:
         root = settings.db_path()
         for dirpath, _, filenames in os.walk(settings.db_path('src')):
             for filename in filenames:
@@ -147,11 +149,12 @@ def make_source_zip(settings):
                 arcname = src_path[len(root):]
                 while arcname and arcname.startswith(os.sep):
                     arcname = arcname[len(os.sep):]
-                source.write(src_path, arcname = arcname)
+                source.write(src_path, arcname=arcname)
         source.write(settings.db_path('COPYING.txt'),
-                     arcname = 'COPYING.txt')
+                     arcname='COPYING.txt')
         source.write(settings.db_path('README.txt'),
-                     arcname = 'README.txt')
+                     arcname='README.txt')
+
 
 def build(settings):
     pyinstaller = pyinstaller_path()
@@ -171,18 +174,20 @@ def build(settings):
         args.append('--clean')
     # Input file
     args.append(settings.db_script())
-    print " ".join(args)
+    print(" ".join(args))
     subprocess.call(args)
 
+
 def package(settings):
-    with zipfile.ZipFile(settings.packaged_file(), mode = 'w',
-                         compression = zipfile.ZIP_DEFLATED) as packaged:
+    with zipfile.ZipFile(settings.packaged_file(), mode='w',
+                         compression=zipfile.ZIP_DEFLATED) as packaged:
         packaged.write(settings.built_exec(),
-                       arcname = os.path.basename(settings.built_exec()))
+                       arcname=os.path.basename(settings.built_exec()))
         packaged.write(settings.db_path('COPYING.txt'),
-                       arcname = 'COPYING.txt')
+                       arcname='COPYING.txt')
         packaged.write(settings.db_path('README.txt'),
-                       arcname = 'README.txt')
+                       arcname='README.txt')
+
 
 def main():
     settings = BuildSettings.read_args()
@@ -191,6 +196,7 @@ def main():
     build(settings)
     package(settings)
     print "DrumBurp packaged in", settings.packaged_file()
+
 
 if __name__ == '__main__':
     main()
