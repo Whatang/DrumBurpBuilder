@@ -10,10 +10,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Docker build
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: whatang/drumburp-builder
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          dockerfile: Dockerfile.windows
-          cache: true
+        run: docker build -f Dockerfile.windows
