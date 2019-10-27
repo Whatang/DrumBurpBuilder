@@ -7,8 +7,6 @@ jobs:
     name: Windows
     runs-on: windows-latest
     steps:
-      - name: Check where we are
-        run: ls "C:\Program Files (x86)"
       - name: Checkout
         uses: actions/checkout@master
       - name: Docker build

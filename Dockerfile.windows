@@ -1,4 +1,4 @@
-FROM  mcr.microsoft.com/windows/servercore:1903
+FROM  mcr.microsoft.com/windows/servercore:ltsc2019
 LABEL Version=0.1 Name=DrumBurp-Builder-Windows
 RUN mkdir C:\install
 RUN mkdir C:\output
