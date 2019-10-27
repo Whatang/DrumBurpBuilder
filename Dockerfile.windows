@@ -1,0 +1,15 @@
+FROM  mcr.microsoft.com/windows/servercore:1903
+LABEL Version=0.1 Name=DrumBurp-Builder-Windows
+RUN mkdir C:\install
+RUN mkdir C:\output
+RUN mkdir C:\build
+RUN mkdir C:\src
+COPY environment/install.ps1 C:/install/install.ps1
+COPY environment/frozen_pip C:/install/frozen_pip
+COPY build/buildDrumBurp.py C:/build/buildDrumBurp.py
+ADD https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi C:/install/
+ADD https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe/download C:/install/
+WORKDIR C:\\install
+RUN powershell.exe C:\install\install.ps1 -Wait
+WORKDIR C:\\build
+CMD python buildDrumBurp.py -o C:/output -b C:/build C:/src
