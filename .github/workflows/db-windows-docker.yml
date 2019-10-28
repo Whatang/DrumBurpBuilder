@@ -5,15 +5,15 @@ on: [push]
 jobs:
   build:
     name: Windows
-    runs-on: windows-latest
+    runs-on: windows-2016
     steps:
       - name: Checkout
         uses: actions/checkout@master
       - name: DockerHub login
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker build
-        run: docker build -f Dockerfile.windows .
+        run: docker build -f Dockerfile.windows -t whatang/db-builder-windows:0.1.0 -t whatang/db-builder-windows:latest .
       - name: List docker images
         run: docker image ls
       - name: Push to DockerHub
-        run: docker push DrumBurp-Builder-Windows:0.1
+        run: docker push whatang/db-builder-windows:0.1.0 whatang/db-builder-windows:latest
