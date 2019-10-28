@@ -10,7 +10,7 @@ COPY environment/frozen_pip C:/install/frozen_pip
 COPY build/buildDrumBurp.py C:/build/buildDrumBurp.py
 WORKDIR C:\\install
 RUN msiexec.exe /I python-2.7.17.amd64.msi /quiet /passive /qn
-RUN PyQt4-4.11-gpl-Py2.7-Qt4.8.6-x64.exe /S
+RUN PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe /S
 RUN pip install -r frozen_pip
 WORKDIR C:\\build
 CMD python buildDrumBurp.py -o C:/output -b C:/build C:/src
