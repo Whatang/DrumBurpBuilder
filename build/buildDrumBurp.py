@@ -79,10 +79,7 @@ class BuildSettings(object):
 
     def _get_version(self):
         sys.path.append(self.db_path('src'))
-        try:
-            import DBVersion
-        except ImportError:
-            raise RuntimeError("Could not import DrumBurp version info")
+        import DBVersion
         return DBVersion.DB_VERSION
 
     def get_output_name(self):
@@ -114,8 +111,13 @@ class BuildSettings(object):
 
 def pyinstaller_path():
     if platform.system() == "Windows":
-        return os.path.join(os.path.dirname(PYTHON), "Scripts",
-                            "pyinstaller.exe")
+        candidates = [os.path.join(os.path.dirname(PYTHON), "Scripts",
+                                   "pyinstaller.exe"),
+                      os.path.join(os.path.dirname(PYTHON),
+                                   "pyinstaller.exe")]
+        for can in candidates:
+            if os.path.exists(can):
+                return can
     else:
         pyi_path = os.path.join(os.path.dirname(PYTHON), "pyinstaller")
         if os.path.exists(pyi_path):
