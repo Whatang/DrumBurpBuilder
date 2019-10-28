@@ -79,7 +79,7 @@ class BuildSettings(object):
 
     def _get_version(self):
         sys.path.append(self.db_path('src'))
-        import DBVersion
+        import DBVersion  # pylint: disable=import-error
         return DBVersion.DB_VERSION
 
     def get_output_name(self):
