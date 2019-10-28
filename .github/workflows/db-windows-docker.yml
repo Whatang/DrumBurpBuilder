@@ -16,4 +16,6 @@ jobs:
       - name: List docker images
         run: docker image ls
       - name: Push to DockerHub
-        run: docker push whatang/db-builder-windows:0.1.0 whatang/db-builder-windows:latest
+        run: docker push whatang/db-builder-windows:0.1.0 
+      - name: Update latest tag on DockerHub
+        run: docker push whatang/db-builder-windows:latest
