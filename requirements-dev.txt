@@ -1,3 +1,4 @@
 pre-commit
 pylint
 autopep8
+bump2version
