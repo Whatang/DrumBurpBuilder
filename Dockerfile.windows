@@ -1,13 +1,10 @@
 FROM  python:2.7.17-windowsservercore-ltsc2016
 LABEL Version=0.1.0 Name=db-builder-windows
 # Make needed dirs
-RUN mkdir C:\output
-RUN mkdir C:\build
-RUN mkdir C:\src
-RUN mkdir C:\install
+RUN mkdir C:\output C:\build C:\DrumBurp C:\install
 WORKDIR C:\\install
 
-# Add VS2010 C++ Redistributable
+# Download and install VS2008 C++ Redistributable
 ADD https://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe C:/install/vcredist_x64.exe
 RUN c:\install\vcredist_x64.exe /quiet /install
 
@@ -18,16 +15,20 @@ RUN powershell -Command Expand-Archive c:\install\mingit.zip -DestinationPath c:
     setx /M PATH $('c:\mingit\cmd;{0}' -f $env:PATH)
 
 # Download and install PyQt
-ADD https://downloads.sourceforge.net/project/pyqt/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fpyqt%2Ffiles%2FPyQt4%2FPyQt-4.11.3%2FPyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe%2Fdownload&ts=1572218405 C:/install/
+ADD https://netcologne.dl.sourceforge.net/project/pyqt/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe C:/install/
 RUN C:\install\PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe /S
+
+# Install NSIS installer tool
+ADD https://downloads.sourceforge.net/project/nsis/NSIS%203/3.04/nsis-3.04-setup.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.04%2Fnsis-3.04-setup.exe%2Fdownload%3Fuse_mirror%3Dnetcologne%26download%3D&ts=1572714477 C:/install/nsis-3.04-setup.exe
+RUN C:\install\nsis-3.04-setup.exe /S
 
 # Install Python modules
 COPY environment/frozen_pip C:/install/frozen_pip
 RUN pip install -r frozen_pip
 
-# Install the entrypoint script
-COPY build/buildDrumBurp.py C:/build/buildDrumBurp.py
+# Copy the build script
+# COPY build/build.bat C:/install/build.bat
 
 # Set up what the container does when run
 WORKDIR C:\\build
-CMD python buildDrumBurp.py -o C:/output -b C:/build C:/src
+CMD C:/build/build.bat
