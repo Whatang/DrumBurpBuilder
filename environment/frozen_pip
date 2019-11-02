@@ -1,4 +1,4 @@
-pyinstaller==2.1
+pyinstaller
 pygame==1.9.2
 pylint
 pywin32==222
