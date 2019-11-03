@@ -1,4 +1,4 @@
-FROM  python:2.7.17-windowsservercore-ltsc2016
+FROM  python:2.7.17
 LABEL Version=0.1.0 Name=db-builder-windows
 # Make needed dirs
 RUN mkdir C:\build
@@ -34,6 +34,8 @@ RUN pip install -r frozen_pip
 COPY build/build.ps1 C:/build/build.ps1
 COPY build/DrumBurp.nsi C:/build/dist/DrumBurp.nsi
 
+# Set the Python encoding environment variable
+ENV PYTHONIOENCODING=UTF-8
 
 # Set up what the container does when run
 WORKDIR C:\\build
