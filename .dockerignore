@@ -1,11 +1,9 @@
 .git
 .github
 .dockerignore
-environment/*.tar.gz
 .gitignore
 .pre-commit-config.yaml
 .bumpversion.cfg
 README.md
-requirements-dev.txt
 .vscode
 *.pyc

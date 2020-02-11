@@ -1,0 +1,5 @@
+pyinstaller
+pygame==1.9.2
+pylint
+pywin32==222
+singledispatch>=3.4.0.3

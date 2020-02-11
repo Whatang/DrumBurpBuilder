@@ -1,42 +1,27 @@
-FROM  python:2.7.17
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 LABEL Version=0.1.0 Name=db-builder-windows
 # Make needed dirs
-RUN mkdir C:\build
-RUN mkdir C:\build\dist
-RUN mkdir C:\build\DrumBurp
-RUN mkdir C:\build\output
-RUN mkdir C:\install
+RUN mkdir C:\build C:\build\dist C:\build\DrumBurp C:\build\output C:\install
 WORKDIR C:\\install
 
-# Download and install VS2008 C++ Redistributable
-ADD https://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe C:/install/vcredist_x64.exe
-RUN c:\install\vcredist_x64.exe /quiet /install
+# Install chocolatey
+ADD install/installChoco.ps1 ./installChoco.ps1
+RUN powershell .\installChoco.ps1 -Wait; Remove-Item .\installChoco.ps1 -Force
 
-# Download and install git
-ADD https://github.com/git-for-windows/git/releases/download/v2.23.0.windows.1/MinGit-2.23.0-64-bit.zip C:/install/mingit.zip
-RUN powershell -Command Expand-Archive c:\install\mingit.zip -DestinationPath c:\mingit ; \
-    Remove-Item c:\install\mingit.zip -Force ; \
-    setx /M PATH $('c:\mingit\cmd;{0}' -f $env:PATH)
+# Download and install required choco packages
+RUN choco install -y vcredist2008 nsis python2 git
 
-# Download and install PyQt
-ADD https://netcologne.dl.sourceforge.net/project/pyqt/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe C:/install/
-RUN C:\install\PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x64.exe /S
+# Install PyQt
+ADD install/install_pyqt.ps1 ./install_pyqt.ps1
+RUN powershell .\install_pyqt.ps1 -Wait; Remove-Item .\install_pyqt.ps1 -Force
 
-# Install NSIS installer tool
-ADD https://downloads.sourceforge.net/project/nsis/NSIS%203/3.04/nsis-3.04-setup.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.04%2Fnsis-3.04-setup.exe%2Fdownload%3Fuse_mirror%3Dnetcologne%26download%3D&ts=1572714477 C:/install/nsis-3.04-setup.exe
-RUN C:\install\nsis-3.04-setup.exe /S
-
-# Install Python modules
-COPY environment/frozen_pip C:/install/frozen_pip
-RUN pip install -r frozen_pip
-
-# Copy the build script
-COPY build/build.ps1 C:/build/build.ps1
-COPY build/DrumBurp.nsi C:/build/dist/DrumBurp.nsi
+# Install base Python modules
+ADD environment/requirements-windows.txt .
+RUN pip install -r ./requirements-windows.txt
 
 # Set the Python encoding environment variable
 ENV PYTHONIOENCODING=UTF-8
 
 # Set up what the container does when run
 WORKDIR C:\\build
-CMD C:/build/build.ps1
+CMD powershell C:/build/DrumBurp/build/build_windows.ps1
