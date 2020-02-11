@@ -12,10 +12,10 @@ jobs:
       - name: DockerHub login
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker build
-        run: docker build -f Dockerfile.windows -t whatang/db-builder-windows:0.1.0 -t whatang/db-builder-windows:latest .
+        run: docker build -f Dockerfile.windows -t whatang/db-builder-windows:0.1.1 -t whatang/db-builder-windows:latest .
       - name: List docker images
         run: docker image ls
       - name: Push to DockerHub
-        run: docker push whatang/db-builder-windows:0.1.0
+        run: docker push whatang/db-builder-windows:0.1.1
       - name: Update latest tag on DockerHub
         run: docker push whatang/db-builder-windows:latest
